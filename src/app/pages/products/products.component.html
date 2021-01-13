@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="table-wrapper">
+    <div class="table-title">
+      <div class="row">
+        <div class="col-sm-6">
+          <h2> <b>Products</b></h2>
+        </div>
+        <div class="col-sm-6">
+          <a href="#" [routerLink]="['/create-product']" class="btn btn-success"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a>
+        </div>
+      </div>
+    </div>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>
+            Id
+          </th>
+          <th>Name</th>
+          <th>Expiration date</th>
+          <th>Raiting</th>
+          <th>Brand</th>
+          <th>Categories</th>
+          <th>Featured</th>
+          <th style="width: 140px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>{{product?.id}}</td>
+          <td>{{product?.name}}</td>
+          <td>{{product?.expirationDate | date: 'dd/MM/yyyy'}}</td>
+          <td>{{product?.rating}}</td>
+          <td>{{product?.brandName}}</td>
+          <td><span *ngFor="let category of product?.categoryNames">{{category}} </span></td>
+          <td>
+            <div [ngSwitch]="product?.featured">
+              <div *ngSwitchCase="true">
+                <span class="badge-circle badge-circle-xs badge-circle-success"></span>
+              </div>
+              <div *ngSwitchCase="false">
+                <span class="badge-circle badge-circle-xs badge-circle-danger"></span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <a href="#" [routerLink]="['/product-details', product.id]" class="info"><i class="material-icons" data-toggle="tooltip"
+                title="Info">info</i></a>
+            <a href="#" [routerLink]="['/edit-product', product.id]"  class="edit"><i class="material-icons" data-toggle="tooltip"
+                title="Edit">&#xE254;</i></a>
+            <a href="javasript:void(0)" (click)="deleteProduct(product.id)" class="delete"><i class="material-icons" data-toggle="tooltip"
+                title="Delete">&#xE872;</i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

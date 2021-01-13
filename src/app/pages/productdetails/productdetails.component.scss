@@ -1,0 +1,20 @@
+.details{
+    background-color: #fff;
+    box-shadow: 0 0 37px rgba(8,21,66,0.05);
+    border: none !important;
+    border-radius: 5px;
+    padding: 20px;
+    width: 50%;
+    // display: flex;
+    justify-content: space-between;
+    h5{
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    p{  
+        font-size: 16px;
+        margin-left: 20px;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+}

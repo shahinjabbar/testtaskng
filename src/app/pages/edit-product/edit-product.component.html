@@ -1,0 +1,55 @@
+<div class="container">
+
+  <div class="card">
+    <form [formGroup]="productForm" class="theme-form mega-form">
+      <div class="card-header">
+        <h5>Create Product</h5>
+      </div>
+      <div class="card-body">
+
+        <div class="form-group">
+          <label class="col-form-label"> Name</label>
+          <input class="form-control" type="text" placeholder="Name" formControlName="Name">
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">Expiration Date</label>
+          <input class="form-control" type="date"  formControlName="ExpirationDate">
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">Items In Stock</label>
+          <input class="form-control" type="Number" placeholder="Enter Items In Stock"  formControlName="ItemsInStock">
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">Receipt Date</label>
+          <input class="form-control" type="date" formControlName="ReceiptDate">
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">Rating</label>
+          <input class="form-control" type="Number" placeholder="Enter Rating" formControlName="Rating">
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">Brand Name</label>
+          <select class="form-control" type="text" formControlName="BrandId">
+            <option *ngFor="let brand of brands" [ngValue]="brand?.id">{{brand?.name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">Category Name</label>
+          <!-- <select class="form-control" type="text" formControlName="CategoryIds">
+            <option *ngFor="let category of categories" [ngValue]="category?.id">{{category?.name}}</option>
+          </select> -->
+
+          <ng-multiselect-dropdown [placeholder]="'custom placeholder'" [data]="categories" formControlName="CategoryIds"
+             [settings]="dropdownSettings" (onSelect)="onItemSelect($event)"
+            (onSelectAll)="onSelectAll($event)">
+          </ng-multiselect-dropdown>
+        </div>
+
+      </div>
+      <div class="card-footer">
+        <button (click)="submit()" class="btn btn-primary mr-3" data-original-title="" title="">Submit</button>
+        <a type="button" href="#" [routerLink]="['/']" class="btn btn-outline-primary mt-5 mb-5">Back To Product List</a>
+      </div>
+    </form>
+  </div>
+</div>
