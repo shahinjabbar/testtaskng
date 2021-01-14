@@ -73,10 +73,10 @@ export class ErrorInterceptor implements HttpInterceptor {
 
               Swal.fire({
                 title: 'Error',
-                text: err.error != null ? err.error.errors.Message : '',
+                text: err.error != null ? err.error.errors.Name : '',
                 icon: 'warning',
                 showCancelButton: false,
-                confirmButtonText: 'Bağla',
+                confirmButtonText: 'close',
                 buttonsStyling: false,
                 customClass: {
                   confirmButton: 'btn btn-primary btn-width-small mx-1'

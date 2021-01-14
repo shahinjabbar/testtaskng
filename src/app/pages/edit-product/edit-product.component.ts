@@ -6,6 +6,7 @@ import { IBrand } from 'src/app/interfaces/IBrand';
 import { ICategory } from 'src/app/interfaces/ICategory';
 import { IProduct } from 'src/app/interfaces/IProduct';
 import { AppService } from 'src/app/services/app/app.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-product',
@@ -54,25 +55,52 @@ export class EditProductComponent implements OnInit {
   createProductForm() {
     this.productForm = this.fb.group({
       Name: ['', [Validators.required]],
-      ExpirationDate: [''],
+      ExpirationDate: [null],
       ItemsInStock: [0, [Validators.required]],
-      ReceiptDate: [''],
+      ReceiptDate: [null],
       Rating: [0, [Validators.required]],
       BrandId: [null, [Validators.required]],
-      CategoryIds: [[], [Validators.required]],
+      CategoryIds: [null, [Validators.required]],
       // navigatorUrl: ['/subjects/0']
     });
   }
-
-
   submit() {
+    if (this.selectedCategories.length == 0) {
+      this.selectedCategories = null
+    }
     this.productForm.patchValue({
       CategoryIds: this.selectedCategories
     })
-    this.appservice.putProduct(this.productId, this.productForm.value).subscribe(response => {
-      this.router.navigate(['/']);
-    });
+    if(this.productForm.valid){
+      this.appservice.putProduct(this.productId, this.productForm.value).subscribe(response => {
+        Swal.fire({
+          title: 'Succes!',
+          icon: 'success',
+          showCancelButton: false,
+          confirmButtonText: 'Close',
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: 'btn btn-primary btn-width-small mx-1'
+        },
+        });
+        this.router.navigate(['/']);
+      });
+    }
+    else{
+      Swal.fire({
+        title: 'You should select Brand!',
+        icon: 'warning',
+        showCancelButton: false,
+        confirmButtonText: 'Close',
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: 'btn btn-primary btn-width-small mx-1'
+      },
+      });
+    }
   }
+
+
 
   getCategories() {
     this.appservice.getCategories().subscribe(response => {
@@ -84,16 +112,16 @@ export class EditProductComponent implements OnInit {
     this.appservice.getProduct(id).subscribe(response => {
       this.product = response;
       console.log(this.product);
-      
+      this.selectedCategories = this.product.categories.map(item=> item.id);
       this.productForm.patchValue({
         Name: this.product.name,
         Featured: this.product.featured,
-        ExpirationDate: formatDate(this.product.expirationDate, 'yyyy-mm-dd', 'en'),
+        ExpirationDate: this.product.expirationDate,
         ItemsInStock: this.product.itemsInStock,
         ReceiptDate: this.product.receiptDate,
         Rating: this.product.rating,
-        BrandId: this.product.brandName,
-        CategoryIds: this.product.categoryNames,
+        BrandId: this.product.brand.id,
+        CategoryIds: this.product.categories,
       })
     });
   }
@@ -107,6 +135,16 @@ export class EditProductComponent implements OnInit {
   onItemSelect(item: any) {
     this.selectedCategories.push(item.id)
   }
+
+  onItemDeSelect(item: any) {
+    const index = this.selectedCategories.indexOf(item.id);
+    if (index > -1) {
+      this.selectedCategories.splice(index, 1);
+    }
+    console.log(this.selectedCategories);
+    
+  }
+
   onSelectAll(items: any) {
     items.map(item=>{
       this.selectedCategories.push(item.id)
@@ -115,5 +153,8 @@ export class EditProductComponent implements OnInit {
     
   }
 
+  onDeSelectAll(items: any) {
+    this.selectedCategories = []    
+  }
 
 }

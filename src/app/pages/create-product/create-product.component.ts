@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { IBrand } from 'src/app/interfaces/IBrand';
 import { ICategory } from 'src/app/interfaces/ICategory';
 import { AppService } from 'src/app/services/app/app.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-product',
@@ -31,8 +32,8 @@ export class CreateProductComponent implements OnInit {
       singleSelection: false,
       idField: 'id',
       textField: 'name',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
+      // selectAllText: 'Select All',
+      // unSelectAllText: 'UnSelect All',
       itemsShowLimit: 3,
       allowSearchFilter: false
     };
@@ -45,24 +46,51 @@ export class CreateProductComponent implements OnInit {
   createProductForm() {
     this.productForm = this.fb.group({
       Name: ['', [Validators.required]],
-      ExpirationDate: [''],
+      ExpirationDate: [null],
       ItemsInStock: [0, [Validators.required]],
-      ReceiptDate: [''],
+      ReceiptDate: [null],
       Rating: [0, [Validators.required]],
       BrandId: [null, [Validators.required]],
-      CategoryIds: [[], [Validators.required]],
+      CategoryIds: [[]],
       // navigatorUrl: ['/subjects/0']
     });
   }
 
 
   submit() {
+    if (this.selectedCategories.length == 0) {
+      this.selectedCategories = null
+    }
     this.productForm.patchValue({
       CategoryIds: this.selectedCategories
     })
-    this.appservice.postProduct(this.productForm.value).subscribe(response => {
-      this.router.navigate(['/']);
-    });
+    if(this.productForm.valid){
+      this.appservice.postProduct(this.productForm.value).subscribe(response => {
+        Swal.fire({
+          title: 'Succes!',
+          icon: 'success',
+          showCancelButton: false,
+          confirmButtonText: 'Close',
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: 'btn btn-primary btn-width-small mx-1'
+        },
+        });
+        this.router.navigate(['/']);
+      });
+    }
+    else{
+      Swal.fire({
+        title: 'You should select Brand!',
+        icon: 'warning',
+        showCancelButton: false,
+        confirmButtonText: 'Close',
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: 'btn btn-primary btn-width-small mx-1'
+      },
+      });
+    }
   }
 
   getCategories() {
@@ -77,8 +105,18 @@ export class CreateProductComponent implements OnInit {
     });
   }
 
+  onItemDeSelect(item: any) {
+    const index = this.selectedCategories.indexOf(item.id);
+    if (index > -1) {
+      this.selectedCategories.splice(index, 1);
+    }
+    
+  }
+
   onItemSelect(item: any) {
-    this.selectedCategories.push(item.id)
+    this.selectedCategories.push(item.id);
+    console.log(this.selectedCategories);
+    
   }
   onSelectAll(items: any) {
     items.map(item=>{
@@ -86,6 +124,10 @@ export class CreateProductComponent implements OnInit {
     })
     console.log(this.selectedCategories);
     
+  }
+
+  onDeSelectAll(items: any) {
+    this.selectedCategories = []    
   }
 
 }

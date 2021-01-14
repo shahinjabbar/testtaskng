@@ -29,27 +29,24 @@
         </div>
         <div class="form-group">
           <label class="col-form-label">Brand Name</label>
-          <select class="form-control" type="text" formControlName="BrandId">
+          <select class="form-control" type="text" formControlName="BrandId" required>
             <option *ngFor="let brand of brands" [ngValue]="brand?.id">{{brand?.name}}</option>
           </select>
-        </div>
-        <div class="form-group">
-          <label class="col-form-label">Category Name</label>
-          <!-- <select class="form-control" type="text" formControlName="CategoryIds">
-            <option *ngFor="let category of categories" [ngValue]="category?.id">{{category?.name}}</option>
-          </select> -->
+          </div>
+          <div class="form-group">
+            <label class="col-form-label">Category Name</label>
+            <ng-multiselect-dropdown [placeholder]="'select categories'" [data]="categories"
+              formControlName="CategoryIds" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)"
+              (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+            </ng-multiselect-dropdown>
+          </div>
 
-          <ng-multiselect-dropdown [placeholder]="'custom placeholder'" [data]="categories" formControlName="CategoryIds"
-             [settings]="dropdownSettings" (onSelect)="onItemSelect($event)"
-            (onSelectAll)="onSelectAll($event)">
-          </ng-multiselect-dropdown>
         </div>
-
-      </div>
-      <div class="card-footer">
-        <button (click)="submit()" class="btn btn-primary mr-3" data-original-title="" title="">Submit</button>
-        <a type="button" href="#" [routerLink]="['/']" class="btn btn-outline-primary mt-5 mb-5">Back To Product List</a>
-      </div>
+        <div class="card-footer">
+          <button (click)="submit()" class="btn btn-primary mr-3" data-original-title="" title="">Submit</button>
+          <a type="button" href="#" [routerLink]="['/']" class="btn btn-outline-primary mt-5 mb-5">Back To Product
+            List</a>
+        </div>
     </form>
   </div>
 </div>

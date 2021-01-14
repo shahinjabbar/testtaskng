@@ -31,8 +31,8 @@
           <td>{{product?.name}}</td>
           <td>{{product?.expirationDate | date: 'dd/MM/yyyy'}}</td>
           <td>{{product?.rating}}</td>
-          <td>{{product?.brandName}}</td>
-          <td><span *ngFor="let category of product?.categoryNames">{{category}} </span></td>
+          <td>{{product?.brand?.name}}</td>
+          <td><p *ngFor="let category of product?.categories">{{category?.name}} </p></td>
           <td>
             <div [ngSwitch]="product?.featured">
               <div *ngSwitchCase="true">

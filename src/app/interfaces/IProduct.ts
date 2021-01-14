@@ -6,6 +6,6 @@ export interface IProduct {
     itemsInStock: number,
     receiptDate: Date,
     rating: string,
-    brandName: string,
-    categoryNames: string[],
+    brand: any,
+    categories: any[],
 }
